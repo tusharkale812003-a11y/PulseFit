@@ -1,6 +1,8 @@
 {
-  "appId": "com.pulsefit.offline.app",
+  "appId": "com.pulsefit.workout",
   "appName": "PulseFit",
   "webDir": "dist",
-  "bundledWebRuntime": false
+  "android": {
+    "backgroundColor": "#090d16"
+  }
 }
