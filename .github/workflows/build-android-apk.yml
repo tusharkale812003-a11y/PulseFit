@@ -1,38 +1,50 @@
-name: Build Android APK
+
+name: Build PulseFit Android APK
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository code (Upgraded to v5 / latest)
-      - name: Checkout Repository
-        uses: actions/checkout@v5
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # Step 2: Set up JDK (Upgraded to v5)
-      - name: Set up JDK 17
-        uses: actions/setup-java@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
+          node-version: 22
 
-      # Step 3: Setup Node.js (If your build requires Node/React Native, upgraded to v5)
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
+      - name: Set up Java
+        uses: actions/setup-java@v4
         with:
-          node-version: '24'
+          distribution: temurin
+          java-version: 21
 
-      # Step 4: Make Gradle wrapper executable
-      - name: Make Gradlew Executable
-        run: chmod +x gradlew
+      - name: Install dependencies
+        run: npm install
 
-      # Step 5: Build the APK using Gradle
-      - name: Build APK
+      - name: Build web app
+        run: npm run build
+
+      - name: Add Android platform
+        run: npx cap add android
+
+      - name: Sync app with Android project
+        run: npx cap sync android
+
+      - name: Build debug APK
+        working-directory: android
         run: ./gradlew assembleDebug
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: PulseFit-Android-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
