@@ -1,0 +1,8 @@
+{
+  "name": "Remix PulseFit - 100% Offline Daily Workout",
+  "description": "Zero-dependency offline daily workout app with smart interval timers, audio cues, streak tracking, and local progress logs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
